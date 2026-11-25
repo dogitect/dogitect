@@ -1,0 +1,203 @@
+@use "../../../styles/animations" as animations;
+@use "../../../styles/responsive" as responsive;
+
+// Copyright 2026 Leon Xia. MIT License.
+
+.navigation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: calc(var(--space-md) + env(safe-area-inset-top, 0px))
+    calc(var(--space-xl) + env(safe-area-inset-right, 0px)) var(--space-md)
+    calc(var(--space-xl) + env(safe-area-inset-left, 0px));
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+
+  &--hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @include responsive.phone-only {
+    padding: calc(var(--space-sm) + env(safe-area-inset-top, 0px))
+      calc(var(--space-md) + env(safe-area-inset-right, 0px)) var(--space-sm)
+      calc(var(--space-md) + env(safe-area-inset-left, 0px));
+  }
+
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    pointer-events: auto;
+    cursor: default;
+  }
+
+  &__toggle {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+
+    &-line {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background-color: var(--color-on-background);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center;
+    }
+
+    &--open &-line {
+      &:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+
+      &:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+      }
+    }
+
+    &:hover &-line {
+      background-color: var(--color-on-background);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: 0;
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: calc(var(--space-md) + 44px + var(--space-sm));
+    right: var(--space-xl);
+    z-index: 1001;
+
+    background: var(--color-background);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+
+    width: max-content;
+    height: auto;
+    padding: var(--space-sm) 0;
+    overflow: visible;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+
+    transition:
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.3s;
+
+    &:focus {
+      outline: none;
+    }
+
+    @include responsive.phone-only {
+      right: var(--space-md);
+      top: calc(var(--space-sm) + 44px + var(--space-sm));
+    }
+
+    &--open {
+      pointer-events: auto;
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+
+      .navigation__list {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    opacity: 1;
+    transform: none;
+    pointer-events: none;
+  }
+
+  &__item {
+    position: relative;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-on-surface-variant);
+    font-size: var(--font-size-sm);
+    font-weight: 400;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    border-radius: 0;
+    white-space: nowrap;
+    background-color: transparent;
+    @include animations.hover-transition(color, background-color);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-on-background);
+      background-color: var(--color-overlay-heavy);
+    }
+
+    &:focus-visible {
+      outline: 1px solid var(--color-glass-border-hover);
+      outline-offset: -1px;
+    }
+
+    &--accent {
+      color: var(--color-accent);
+      font-weight: 500;
+
+      &:hover,
+      &:focus-visible {
+        color: var(--color-accent-variant);
+        background-color: var(--color-overlay-heavy);
+      }
+    }
+  }
+}
