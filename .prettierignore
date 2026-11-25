@@ -1,0 +1,11 @@
+dist
+coverage
+.angular
+node_modules
+.wrangler
+*.tsbuildinfo
+public/images
+bun.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
