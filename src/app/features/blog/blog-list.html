@@ -1,0 +1,38 @@
+<section class="blog">
+  <h1 class="visually-hidden">Blog</h1>
+
+  @if (waiting()) {
+    <p class="blog__empty" role="status">Loading notes.</p>
+  } @else if (failed()) {
+    <p class="blog__empty" role="alert">Could not load notes.</p>
+  } @else if (posts().length === 0) {
+    <p class="blog__empty">No published notes.</p>
+  } @else {
+    <div class="blog__grid">
+      @for (post of posts(); track post.slug; let index = $index) {
+        <a class="blog-card" [routerLink]="['/blog', post.slug]">
+          <app-optimized-image
+            class="blog-card__cover"
+            [src]="post.cover || 'images/blog/default-cover.png'"
+            [alt]="''"
+            preset="card"
+            aspectRatio="3 / 2"
+            [fadeIn]="false"
+            [loading]="index === 0 ? 'eager' : 'lazy'"
+          />
+          <div class="blog-card__body">
+            <p class="blog-card__meta">
+              <span>{{ categoriesLabel(post.categories) }}</span>
+              @if (post.draft) {
+                <span class="blog-card__draft">Draft</span>
+              }
+            </p>
+            <h2 class="blog-card__title">{{ post.title }}</h2>
+            <p class="blog-card__description">{{ post.description }}</p>
+            <p class="blog-card__date">{{ dateLabel(post.date) }}</p>
+          </div>
+        </a>
+      }
+    </div>
+  }
+</section>
