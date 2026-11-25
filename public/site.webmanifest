@@ -1,0 +1,43 @@
+{
+  "name": "dogitect — Independent AI and cloud solutions architect",
+  "short_name": "dogitect",
+  "description": "Leon Xia is an independent AI and cloud solutions architect. dogitect is the practice: architecture for platforms, systems, and the decisions around them.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
+  "shortcuts": [
+    {
+      "name": "Insights",
+      "short_name": "Insights",
+      "description": "Selected AI and cloud architecture",
+      "url": "/insights"
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "description": "Notes on AI and cloud architecture",
+      "url": "/blog"
+    },
+    {
+      "name": "About",
+      "short_name": "About",
+      "description": "About Leon Xia",
+      "url": "/about"
+    },
+    {
+      "name": "Contact",
+      "short_name": "Contact",
+      "description": "Contact Leon Xia",
+      "url": "/contact"
+    }
+  ]
+}
