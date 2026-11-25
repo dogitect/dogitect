@@ -1,0 +1,93 @@
+{
+  "name": "dogitect",
+  "version": "2.0.0",
+  "description": "dogitect — Leon Xia, independent AI and cloud solutions architect.",
+  "author": "Leon Xia",
+  "license": "MIT",
+  "scripts": {
+    "ng": "ng",
+    "validate-content": "bun run scripts/validate-content.ts",
+    "assets:hydrate": "bun run scripts/hydrate-lfs-assets.ts",
+    "images:manifest": "bun run scripts/generate-image-manifest.ts",
+    "images:sync": "bun run scripts/sync-images.ts",
+    "insights:build": "bun run scripts/build-insights.ts",
+    "blog:build": "bun run scripts/build-blog.ts",
+    "prestart": "bun run assets:hydrate && bun run images:manifest && bun run insights:build && BLOG_INCLUDE_DRAFTS=1 bun run blog:build",
+    "prebuild": "bun run assets:hydrate && bun run images:manifest && bun run insights:build && bun run blog:build",
+    "prebuild:dev": "bun run assets:hydrate && bun run images:manifest && bun run insights:build && bun run blog:build",
+    "prebuild:watch": "bun run assets:hydrate && bun run images:manifest && bun run insights:build && bun run blog:build",
+    "pretest": "bun run images:manifest",
+    "start": "ng serve --open",
+    "build": "ng build --configuration production && bun run scripts/stamp-index-html.ts",
+    "build:dev": "ng build --configuration development",
+    "build:watch": "ng build --configuration development --watch",
+    "test": "ng test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "type-check": "bun run images:manifest && tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.spec.json && tsc --noEmit -p scripts/tsconfig.json && tsc --noEmit -p workers/tsconfig.json",
+    "analyze": "bun run build && source-map-explorer 'dist/dogitect/browser/*.js'",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
+  },
+  "private": true,
+  "packageManager": "bun@1.4.4",
+  "dependencies": {
+    "@angular/common": "^22.3.0",
+    "@angular/compiler": "^22.3.0",
+    "@angular/core": "^22.3.0",
+    "@angular/forms": "^22.3.0",
+    "@angular/platform-browser": "^22.3.0",
+    "@angular/router": "^22.3.0",
+    "rxjs": "^7.8.2",
+    "tslib": "^2.9.1"
+  },
+  "devDependencies": {
+    "@angular-eslint/builder": "^22.8.0",
+    "@angular-eslint/eslint-plugin": "^22.8.0",
+    "@angular-eslint/eslint-plugin-template": "^22.8.0",
+    "@angular-eslint/schematics": "^22.8.0",
+    "@angular-eslint/template-parser": "^22.8.0",
+    "@angular/build": "^22.3.0",
+    "@angular/cli": "^22.3.0",
+    "@angular/compiler-cli": "^22.3.0",
+    "@aws-sdk/client-s3": "^3.1177.0",
+    "@cloudflare/workers-types": "^5.20261125.1",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.10",
+    "@typescript-eslint/eslint-plugin": "^8.74.0",
+    "@typescript-eslint/parser": "^8.74.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "angular-eslint": "^22.8.0",
+    "bun-types": "^1.4.5",
+    "eslint": "^10.15.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.14.0",
+    "husky": "^9.1.7",
+    "jsdom": "^31.0.1",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
+    "rehype-sanitize": "^6.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "source-map-explorer": "^2.5.3",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "typescript-eslint": "^8.74.0",
+    "unified": "^11.0.5",
+    "vitest": "^5.1.1",
+    "wrangler": "^4.168.0"
+  },
+  "lint-staged": {
+    "{src,scripts}/**/*.ts": [
+      "eslint --fix"
+    ],
+    "src/**/*.html": [
+      "eslint --fix"
+    ],
+    "{src,scripts}/**/*.{ts,html,scss,json}": [
+      "prettier --write"
+    ]
+  }
+}
