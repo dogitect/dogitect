@@ -1,0 +1,14 @@
+/* TEAM */
+Developer: Leon Xia
+Site: https://dogitect.com
+Contact: contact@dogitect.com
+Location: Starbucks
+
+/* SITE */
+Last update: 2026/04/21
+Standards: HTML5, CSS3, ES2022+
+Software: Angular, TypeScript, SCSS
+
+/* THANKS */
+Angular Team - https://angular.dev
+Open Source Community
