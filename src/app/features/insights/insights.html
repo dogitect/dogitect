@@ -1,0 +1,118 @@
+@if (loading()) {
+  <p class="insights__status" role="status">Loading insights.</p>
+} @else if (loadError(); as message) {
+  <p class="insights__status" role="alert">{{ message }}</p>
+} @else if (cases().length === 0) {
+  <p class="insights__status">No insights yet.</p>
+} @else if (isPhone()) {
+  <div class="insights insights--reading">
+    <h1 class="visually-hidden">Insights</h1>
+    @for (item of cases(); track item.slug; let i = $index) {
+      <article class="reading-case" [id]="'insight-' + item.slug">
+        <div class="reading-case__media">
+          <app-optimized-image
+            [src]="item.imagePath"
+            [alt]="item.title"
+            [loading]="i === 0 ? 'eager' : 'lazy'"
+            [fetchpriority]="i === 0 ? 'high' : 'auto'"
+          />
+        </div>
+        <div class="reading-case__copy">
+          <span class="project-card__date">{{
+            formattedDates().get(item.slug)
+          }}</span>
+          <h2 class="project-card__title">{{ item.title }}</h2>
+          <p class="project-card__subtitle">{{ item.subtitle }}</p>
+          <p class="project-card__description">{{ item.description }}</p>
+          <a
+            class="project-card__download"
+            [href]="pdfHref(item)"
+            [attr.download]="item.slug + '.pdf'"
+            [attr.aria-label]="'Download ' + item.title + ' PDF'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12M12 16.5V3"
+              />
+            </svg>
+            <span>Download</span>
+          </a>
+        </div>
+      </article>
+    }
+  </div>
+} @else {
+  <div class="insights">
+    <h1 class="visually-hidden">Insights</h1>
+    <div class="scroll-spacer" [style.height.vh]="totalCases() * 100"></div>
+
+    <div class="cards-viewport">
+      @for (item of cases(); track item.slug; let i = $index) {
+        @let style = cardStyles()[i];
+        <article
+          class="project-card"
+          [style.transform]="style['transform']"
+          [style.opacity]="style['opacity']"
+          [style.z-index]="style['zIndex']"
+          [style.pointer-events]="style['pointerEvents']"
+          [style.box-shadow]="style['boxShadow']"
+        >
+          <div class="project-card__content">
+            <span class="project-card__date">{{
+              formattedDates().get(item.slug)
+            }}</span>
+            <h2 class="project-card__title">{{ item.title }}</h2>
+            <p class="project-card__subtitle">{{ item.subtitle }}</p>
+            <p class="project-card__description">{{ item.description }}</p>
+            <a
+              class="project-card__download"
+              [href]="pdfHref(item)"
+              [attr.download]="item.slug + '.pdf'"
+              [attr.aria-label]="'Download ' + item.title + ' PDF'"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12M12 16.5V3"
+                />
+              </svg>
+              <span>Download</span>
+            </a>
+          </div>
+
+          <div class="project-card__background">
+            <app-optimized-image
+              [src]="item.imagePath"
+              [alt]="item.title"
+              [loading]="isCardVisible(i) ? 'eager' : 'lazy'"
+              [fetchpriority]="i === 0 ? 'high' : 'auto'"
+            />
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="nav-indicator" role="status" aria-live="polite">
+      <span class="nav-indicator__current">{{ activeIndex() + 1 }}</span>
+      <span class="nav-indicator__separator">/</span>
+      <span class="nav-indicator__total">{{ totalCases() }}</span>
+    </div>
+  </div>
+}
