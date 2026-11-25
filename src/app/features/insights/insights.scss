@@ -1,0 +1,269 @@
+// Copyright 2026 Leon Xia. MIT License.
+
+$font-family:
+  -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial,
+  sans-serif;
+
+// Copy stays in the left half. The photograph's subject stays to the right.
+$copy-width: 50%;
+
+.insights {
+  position: relative;
+  background: var(--color-background);
+}
+
+.scroll-spacer {
+  position: relative;
+  pointer-events: none;
+}
+
+.cards-viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.project-card {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  background: var(--color-background);
+  transition: box-shadow 0.3s ease;
+}
+
+.project-card__background {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-surface);
+
+  app-optimized-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    --optimized-image-height: 100%;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.38) 24%,
+      transparent $copy-width
+    );
+    pointer-events: none;
+
+    @media (max-width: 767px) {
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.86) 0%,
+        rgba(0, 0, 0, 0.42) 34%,
+        transparent 58%
+      );
+    }
+  }
+}
+
+.project-card__content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: $copy-width;
+  min-width: 0;
+  padding: 2rem 2.25rem 3.5rem 3.5rem;
+  user-select: none;
+
+  @media (max-width: 1024px) {
+    padding: 2rem 1.5rem 3.25rem 2.25rem;
+  }
+
+  @media (max-width: 767px) {
+    top: auto;
+    width: auto;
+    right: 0;
+    padding: 0 1.5rem 4.25rem;
+  }
+}
+
+.project-card__date {
+  display: block;
+  font-size: 0.75rem;
+  font-family: $font-family;
+  color: var(--color-on-surface-variant);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+.project-card__title {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 300;
+  font-family: $font-family;
+  color: var(--color-on-background);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem;
+
+  @media (max-width: 768px) {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+    margin-bottom: 0.75rem;
+  }
+}
+
+.project-card__subtitle {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-family: $font-family;
+  color: var(--color-on-surface);
+  margin: 0 0 1.5rem;
+  font-weight: 400;
+  line-height: 1.4;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.project-card__description {
+  font-size: 1rem;
+  font-weight: 400;
+  font-family: $font-family;
+  color: var(--color-on-surface-variant);
+  margin: 0;
+  line-height: 1.7;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+}
+
+.project-card__download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 220px;
+  height: 52px;
+  margin-top: 1.75rem;
+  padding: 0;
+  border: 1px solid var(--color-glass-border);
+  border-radius: 0;
+  color: var(--color-on-background);
+  font-family: $font-family;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-decoration: none;
+
+  svg {
+    width: var(--icon-sm);
+    height: var(--icon-sm);
+  }
+
+  &:hover {
+    color: var(--color-on-background);
+    background: var(--color-glass-faint);
+    border-color: var(--color-glass-border-hover);
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--color-glass-border-hover);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 48px;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+.nav-indicator {
+  position: fixed;
+  top: 50%;
+  right: calc(2.75rem + env(safe-area-inset-right, 0px));
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: $font-family;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-on-surface-variant);
+  user-select: none;
+  transform: translateY(-50%);
+}
+
+.nav-indicator__current {
+  line-height: 1;
+}
+
+.nav-indicator__separator,
+.nav-indicator__total {
+  line-height: 1;
+  opacity: 0.5;
+}
+
+.nav-indicator__separator {
+  margin: 0;
+}
+
+.insights--reading {
+  padding-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+}
+
+.reading-case {
+  scroll-margin-top: calc(4.5rem + env(safe-area-inset-top, 0px));
+}
+
+.reading-case__media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--color-surface);
+
+  app-optimized-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    --optimized-image-height: 100%;
+  }
+}
+
+.reading-case__copy {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.25rem 2.5rem;
+  padding-left: calc(1.25rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(1.25rem + env(safe-area-inset-right, 0px));
+
+  .project-card__download {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+.reading-case:last-child .reading-case__copy {
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.insights__status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  margin: 0;
+  color: var(--color-on-surface-variant);
+  font-size: var(--font-size-lg);
+}
