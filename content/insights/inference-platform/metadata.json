@@ -1,0 +1,6 @@
+{
+  "title": "Inference Platform",
+  "subtitle": "The production path for a model",
+  "description": "Routing, capacity, and an evaluation gate for models that leave the notebook. The design names what a request costs once it is served.",
+  "date": "2026-09"
+}
