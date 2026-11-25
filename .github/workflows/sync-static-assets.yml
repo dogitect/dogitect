@@ -1,0 +1,45 @@
+name: Sync static assets
+
+on:
+  workflow_run:
+    workflows: ['Quality Check']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-static-assets
+  cancel-in-progress: true
+
+jobs:
+  quality-check:
+    if: github.event_name == 'workflow_dispatch'
+    uses: ./.github/workflows/quality-check.yml
+
+  sync-assets:
+    needs: quality-check
+    if: ${{ !cancelled() && (needs.quality-check.result == 'success' || (needs.quality-check.result == 'skipped' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')) }}
+    runs-on: ubuntu-26.04
+    environment: production
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          lfs: true
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Sync assets to R2
+        run: bun run images:sync
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
