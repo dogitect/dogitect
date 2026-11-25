@@ -1,0 +1,41 @@
+@if (phase() === 'waiting') {
+  <p class="blog-post blog-post__status" role="status">Loading note.</p>
+} @else if (phase() === 'missing') {
+  <app-not-found-view />
+} @else {
+  <article class="blog-post">
+    <div class="blog-post__body">
+      @for (block of blocks(); track $index) {
+        <!-- Copy the kind so @default never does not collapse this loop binding. -->
+        @let kind = block.type;
+        @switch (kind) {
+          @case ('html') {
+            <div class="blog-prose" [innerHTML]="block.html"></div>
+          }
+          @case ('image') {
+            <figure class="blog-post__figure">
+              <app-optimized-image
+                [src]="block.path"
+                [alt]="block.alt"
+                aspectRatio="16 / 9"
+                sizes="min(56rem, 100vw)"
+              />
+            </figure>
+          }
+          @case ('figma') {
+            <figure class="blog-post__embed">
+              <iframe
+                [src]="block.src"
+                [title]="block.title"
+                allow="fullscreen"
+                referrerpolicy="strict-origin-when-cross-origin"
+                loading="lazy"
+              ></iframe>
+            </figure>
+          }
+          @default never;
+        }
+      }
+    </div>
+  </article>
+}
