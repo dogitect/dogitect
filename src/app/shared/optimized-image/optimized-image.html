@@ -1,0 +1,19 @@
+<div
+  class="optimized-image"
+  [class.optimized-image--fade]="fadeIn()"
+  [class.optimized-image--loaded]="loaded()"
+  [style.aspect-ratio]="aspectRatio()"
+>
+  <img
+    #img
+    [src]="resolvedSrc()"
+    [attr.srcset]="resolvedSrcset() || null"
+    [attr.sizes]="resolvedSizes()"
+    [alt]="alt()"
+    [loading]="loading()"
+    [attr.fetchpriority]="fetchpriority() !== 'auto' ? fetchpriority() : null"
+    decoding="async"
+    draggable="false"
+    (load)="reveal($event)"
+  />
+</div>
